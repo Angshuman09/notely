@@ -1,17 +1,19 @@
 import express from "express";
 import { userRouter } from "./routes/user.route.js";
 import cors from 'cors';
+import { clerkMiddleware } from '@clerk/express'
 
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173", // frontend URL
+  origin: "http://localhost:5173", 
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }))
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
+app.use(clerkMiddleware())
 
 app.use("/users", userRouter);
 
