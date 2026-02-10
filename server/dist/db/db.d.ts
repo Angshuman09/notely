@@ -1,6 +1,2 @@
-import "dotenv/config";
-import { Pool } from "pg";
-export declare const db: import("drizzle-orm/node-postgres").NodePgDatabase<Record<string, never>> & {
-    $client: Pool;
-};
+export declare const db: () => Promise<void>;
 //# sourceMappingURL=db.d.ts.map

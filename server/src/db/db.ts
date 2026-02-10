@@ -1,9 +1,11 @@
-import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import mongoose from 'mongoose'
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-export const db = drizzle(pool);
+export const db = async ()=>{
+  try {
+    await mongoose.connect(process.env.MONGO_URL as string)
+    console.log("mongodb connected succesfully");
+  } catch (error) {
+    console.log("Error in connecting mongoDB");
+    process.exit(1);
+  }
+}
