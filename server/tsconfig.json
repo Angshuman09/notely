@@ -42,7 +42,6 @@
     "skipLibCheck": true,
   },
    "exclude": [
-    "drizzle.config.ts",
     "dist",
     "node_modules"
   ]

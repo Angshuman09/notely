@@ -52,20 +52,20 @@ export const login = async (req: Request, res: Response)=>{
         const {email, password} = req.body;
         
         if(!email || !password){
-            res.status(404).json({error: "email and password must required"});
+            return res.status(404).json({error: "email and password must required"});
         }
 
         const user = await User.findOne({email});
         if(!user){
-            res.status(404).json({error:"user not found."})
+            return res.status(404).json({error:"user not found."})
         }
 
         const verifyPassword = bcrypt.compare(password, user?.password!);
         if(!verifyPassword){
-            res.status(401).json({error: "password not valid."});
+            return res.status(401).json({error: "password not valid."});
         }
-
-        const token = jwt.sign({userId: user?._id},process.env.JWT_SECRET_KEY as string,{
+        const userId = user?.id as string;
+        const token = jwt.sign({userId},process.env.JWT_SECRET_KEY as string,{
             expiresIn: '7d'
         })
 
@@ -73,14 +73,14 @@ export const login = async (req: Request, res: Response)=>{
             httpOnly: true,
             maxAge: 7*24*60*60*1000,
             secure: true,
-            sameSite: false
+            sameSite: "none"
         })
 
         res.status(200).json({user: user?.email})
         
     } catch (error) {
         console.log("Error in user login: ", error);
-        res.status(500).json({
+        return res.status(500).json({
             error:`Error in user login ${error}`
         })
     }
@@ -92,8 +92,19 @@ export const logout = async (_:any, res:Response)=>{
 
 export const getUser = async (req: Request, res: Response)=>{
     try {
-        
-        
+        const userId = req.userId;
+
+        if(!userId){
+            return res.status(401).json({error: "Unauthorized"});
+        }
+
+        const user = User.findById(userId);
+
+        if(!user){
+            return res.status(404).json({error: "user not found"});
+        }
+
+        return res.status(200).json({user});
     } catch (error) {
         console.log("Error in fetching user data: ", error);
         res.status(500).json({

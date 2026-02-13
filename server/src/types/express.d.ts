@@ -1,5 +1,6 @@
 import { AuthObject } from "@clerk/express";
-
+import { Types } from "mongoose";
+import { User } from "../schema/user.schema.ts";
 declare global {
   namespace Express {
     interface Request {
@@ -9,6 +10,8 @@ declare global {
         clerkUserId: string;
         createdAt: Date;
       };
+      userId?: Types.ObjectId | undefined;
+      user?: User | undefined;
     }
   }
 }
