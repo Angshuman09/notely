@@ -1,5 +1,4 @@
-"use client";
-
+import type { User } from "@/types";
 import { FileText, Folder, Star, Trash2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -21,6 +20,7 @@ interface SidebarProps {
   onNavChange: (label: string) => void;
   isOpen?: boolean;
   onClose?: () => void;
+  user?: User | null;
 }
 
 export function Sidebar({
@@ -28,6 +28,7 @@ export function Sidebar({
   onNavChange,
   isOpen,
   onClose,
+  user,
 }: SidebarProps) {
   return (
     <>
@@ -93,11 +94,11 @@ export function Sidebar({
         <div className="mx-5 border-t border-sidebar-border" />
         <div className="flex items-center gap-3 px-5 pt-4">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-            A
+            {user?.username?.[0]?.toUpperCase() ?? "?"}
           </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-medium text-sidebar-foreground">
-              Alex
+          <div className="flex flex-col min-w-0">
+            <span className="text-sm font-medium text-sidebar-foreground truncate">
+              {user?.username ?? "Guest"}
             </span>
             <span className="text-xs text-muted-foreground">Personal</span>
           </div>

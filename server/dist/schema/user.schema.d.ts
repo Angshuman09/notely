@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 export declare const User: mongoose.Model<{
-    email: string;
+    username: string;
     password: string;
     verifyOtp: string;
     expireOtp: number;
@@ -9,7 +9,7 @@ export declare const User: mongoose.Model<{
 } & mongoose.DefaultTimestampProps, {}, {}, {
     id: string;
 }, mongoose.Document<unknown, {}, {
-    email: string;
+    username: string;
     password: string;
     verifyOtp: string;
     expireOtp: number;
@@ -20,7 +20,7 @@ export declare const User: mongoose.Model<{
 }, {
     timestamps: true;
 }> & Omit<{
-    email: string;
+    username: string;
     password: string;
     verifyOtp: string;
     expireOtp: number;
@@ -35,14 +35,14 @@ export declare const User: mongoose.Model<{
 }, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any, any>, {}, {}, {}, {}, {
     timestamps: true;
 }, {
-    email: string;
+    username: string;
     password: string;
     verifyOtp: string;
     expireOtp: number;
     resetOtp: string;
     expireResetOtp: number;
 } & mongoose.DefaultTimestampProps, mongoose.Document<unknown, {}, {
-    email: string;
+    username: string;
     password: string;
     verifyOtp: string;
     expireOtp: number;
@@ -53,7 +53,7 @@ export declare const User: mongoose.Model<{
 }, mongoose.ResolveSchemaOptions<{
     timestamps: true;
 }>> & Omit<{
-    email: string;
+    username: string;
     password: string;
     verifyOtp: string;
     expireOtp: number;
@@ -69,7 +69,7 @@ export declare const User: mongoose.Model<{
     [path: string]: mongoose.SchemaDefinitionProperty<undefined, any, any>;
 } | {
     [x: string]: mongoose.SchemaDefinitionProperty<any, any, mongoose.Document<unknown, {}, {
-        email: string;
+        username: string;
         password: string;
         verifyOtp: string;
         expireOtp: number;
@@ -80,7 +80,7 @@ export declare const User: mongoose.Model<{
     }, mongoose.ResolveSchemaOptions<{
         timestamps: true;
     }>> & Omit<{
-        email: string;
+        username: string;
         password: string;
         verifyOtp: string;
         expireOtp: number;
@@ -94,7 +94,7 @@ export declare const User: mongoose.Model<{
         id: string;
     }> | undefined;
 }, {
-    email: string;
+    username: string;
     password: string;
     verifyOtp: string;
     expireOtp: number;
@@ -107,7 +107,7 @@ export declare const User: mongoose.Model<{
 } & {
     __v: number;
 }>, {
-    email: string;
+    username: string;
     password: string;
     verifyOtp: string;
     expireOtp: number;

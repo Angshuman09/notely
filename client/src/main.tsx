@@ -6,11 +6,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router'
 
 const queryClient = new QueryClient({
-  defaultOptions:{
-    queries:{
-      refetchOnWindowFocus:false
-    }
-  }
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 2 * 60 * 1000, // 2 min default — reduces refetch on reload
+    },
+  },
 });
 
 
