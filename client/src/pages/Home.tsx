@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { useLocation } from "react-router"; // Added import
 import { Sidebar } from "../components/Sidebar";
 import { NotesList } from "../components/NotesList";
 import { NoteEditor } from "../components/NotesEditor";
@@ -9,14 +10,21 @@ import Auth from "./Auth";
 import { useGetUser } from "@/hooks/user";
 
 export function Home() {
-  const { data: user, isLoading } = useGetUser()
-  const [open, setOpen] = useState(false)
+  const { data: user, isLoading } = useGetUser();
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      setOpen(true)
+    if (location.state?.showAuth) {
+      setOpen(true);
+      // Clear the state to prevent reopening on generic re-renders if desirable,
+      // but react-router location state persists.
+      // For now this is fine as it ensures it's open.
+      window.history.replaceState({}, document.title);
+    } else if (!isLoading && !user) {
+      setOpen(true);
     }
-  }, [isLoading, user])
+  }, [isLoading, user, location.state]);
 
   const [notes, setNotes] = useState<Note[]>(initialNotes);
   const [activeNav, setActiveNav] = useState("All Notes");
@@ -90,13 +98,13 @@ export function Home() {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-background">
-      <Auth open={open} onOpenChange={setOpen}/>
+      <Auth open={open} onOpenChange={setOpen} />
       <Sidebar
         activeNav={activeNav}
         onNavChange={setActiveNav}
         isOpen={showSidebar}
         onClose={() => setShowSidebar(false)}
-        user = {user}
+        user={user}
       />
 
       {/* Desktop Layout */}

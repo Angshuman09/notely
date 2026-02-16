@@ -5,25 +5,21 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    profilePicture: {
+        type: String,
+        default: ''
+    },
+    gender: {
+        type: String,
+        default: ''
+    },
+    bio: {
+        type: String,
+        default: ''
+    },
     password: {
         type: String,
         required: true,
-    },
-    verifyOtp: {
-        type: String,
-        default: ''
-    },
-    expireOtp: {
-        type: Number,
-        default: 0
-    },
-    resetOtp: {
-        type: String,
-        default: ''
-    },
-    expireResetOtp: {
-        type: Number,
-        default: 0
     }
 }, { timestamps: true });
 export const User = mongoose.model('User', userSchema);

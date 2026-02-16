@@ -1,66 +1,78 @@
 import type { userData } from "@/zod-validation/user";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useUserAuth = ()=>{
-    const {mutate, isPending, isError, error } = useMutation({
-        mutationFn: async (data: userData)=>{
-            const response = await fetch('http://localhost:3000/user/auth',{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-
-            if(!response.ok) throw new Error("invalid response");
-            return response;
-        }
-    })
-
-    return{
-        mutate,
-        isPending,
-        isError,
-        error
-    }
-}
-
-export const useUserLogout = ()=>{
-    const {mutate, isPending, isError, error} = useMutation({
-        mutationFn: async ()=>{
-            const response = await fetch('http://localhost:5173/user/logout',{
-                method: 'POST',
-            })
-            if(!response.ok) throw new Error("invalid response");
-            return response;
-        }
-    })
-
-    return{
-        mutate,
-        isPending,
-        isError,
-        error
-    }
-}
-
-export const useGetUser = ()=>{
-    const {data, isLoading, isError, error} = useQuery({
-        queryKey: ["user"],
-        queryFn: async ()=>{
-            const response = await fetch('http://localhost:5173/user/get-user',{
-                method: 'GET',
-            })
-            if(!response.ok) throw new Error("invalid response");
-            return response.json();
+export const useUserAuth = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: async (data: userData) => {
+      const response = await fetch("http://localhost:3000/user/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        staleTime: 5 * 60 * 1000, // 5 min — avoid refetch on every reload
-    })
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
 
-    return{
-        data,
-        isLoading,
-        isError,
-        error
-    }
-}
+      if (!response.ok) throw new Error("invalid response");
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
+  return {
+    mutate,
+    isPending,
+    isError,
+    error,
+  };
+};
+
+export const useUserLogout = () => {
+  const queryClient = useQueryClient();
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: async () => {
+      const response = await fetch("http://localhost:3000/user/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("invalid response");
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+
+  return {
+    mutate,
+    isPending,
+    isError,
+    error,
+  };
+};
+
+export const useGetUser = () => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const response = await fetch("http://localhost:3000/user/get-user", {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("invalid response");
+      return response.json();
+    },
+    staleTime: 5 * 60 * 1000, // 5 min — avoid refetch on every reload
+    retry: 1,
+  });
+
+  return {
+    data,
+    isLoading,
+    isError,
+    error,
+  };
+};

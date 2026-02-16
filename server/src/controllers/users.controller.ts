@@ -27,11 +27,12 @@ export const auth = async (req: Request, res: Response)=>{
                 expiresIn: '7d'
             })
     
+            const isProduction = process.env.NODE_ENV === "production";
             res.cookie("token", token, {
                 httpOnly: true,
                 maxAge: 7*24*60*60*1000,
-                secure: true,
-                sameSite: "none"
+                secure: isProduction,
+                sameSite: isProduction ? "none" : "lax"
             })
     
             return res.status(200).json({user: isUserExist?.username})
@@ -49,11 +50,12 @@ export const auth = async (req: Request, res: Response)=>{
             expiresIn: '7d',
         })
 
+        const isProduction = process.env.NODE_ENV === "production";
         res.cookie("token", token, {
             httpOnly: true,
             maxAge: 7*24*60*60*1000,
-            secure: true,
-            sameSite: false
+            secure: isProduction,
+            sameSite: isProduction ? "none" : "lax"
         })
 
         res.status(200).json({user:{
@@ -67,10 +69,17 @@ export const auth = async (req: Request, res: Response)=>{
     }
 }
 
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: false, 
+  });
 
-export const logout = async (_:any, res:Response)=>{
-    res.clearCookie("token");
-}
+  return res.status(200).json({
+    message: "Logged out successfully",
+  })
+};
 
 export const getUser = async (req: Request, res: Response)=>{
     try {
@@ -80,7 +89,7 @@ export const getUser = async (req: Request, res: Response)=>{
             return res.status(401).json({error: "Unauthorized"});
         }
 
-        const user = User.findById(userId);
+        const user = await User.findById(userId);
 
         if(!user){
             return res.status(404).json({error: "user not found"});

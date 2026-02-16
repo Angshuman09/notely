@@ -1,6 +1,7 @@
 import express from "express";
 import cors from 'cors';
 import dotenv from 'dotenv'
+import cookieParser from "cookie-parser";
 import { db } from "./db/db.js";
 import userRoutes from './routes/users.routes.js'
 const app = express();
@@ -10,6 +11,8 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }))
+
+app.use(cookieParser());
 
 dotenv.config({
   path:'../server/.env'

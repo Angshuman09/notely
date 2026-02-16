@@ -1,6 +1,8 @@
+import { useGetUser } from "@/hooks/user";
 import type { User } from "@/types";
 import { FileText, Folder, Star, Trash2 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { useNavigate } from "react-router";
 
 interface NavItem {
   icon: LucideIcon;
@@ -30,6 +32,9 @@ export function Sidebar({
   onClose,
   user,
 }: SidebarProps) {
+  const navigate = useNavigate();
+  const { data } = useGetUser();
+  console.log(data);
   return (
     <>
       {/* Mobile Overlay */}
@@ -92,13 +97,16 @@ export function Sidebar({
 
         {/* User */}
         <div className="mx-5 border-t border-sidebar-border" />
-        <div className="flex items-center gap-3 px-5 pt-4">
+        <div
+          onClick={() => navigate("/profile")}
+          className="flex items-center gap-3 px-5 pt-4 hover:cursor-pointer hover:bg-slate-100"
+        >
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-            {user?.username?.[0]?.toUpperCase() ?? "?"}
+            {data?.user?.username?.[0]?.toUpperCase() ?? "?"}
           </div>
           <div className="flex flex-col min-w-0">
             <span className="text-sm font-medium text-sidebar-foreground truncate">
-              {user?.username ?? "Guest"}
+              {data?.user?.username ?? "Guest"}
             </span>
             <span className="text-xs text-muted-foreground">Personal</span>
           </div>
